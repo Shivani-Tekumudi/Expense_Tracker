@@ -4,12 +4,20 @@ Modal.setAppElement("#root");
 
 type ModalEditAddProps = {
   isOpen: boolean;
+  handleAddBalance :(inputBal:number|null) => void;
   onClose: () => void;
 };
 
 
 
-export default function ModalAddBalance({ isOpen, onClose }: ModalEditAddProps) {
+export default function ModalAddBalance({ isOpen, handleAddBalance ,onClose }: ModalEditAddProps) {
+const [inputBal, setInputBal] = useState<number | null>(null);
+ const handleAddbutton =() =>{
+handleAddBalance(inputBal);
+onClose();
+
+ } 
+
   return (
     <Modal 
     style={{
@@ -43,12 +51,12 @@ export default function ModalAddBalance({ isOpen, onClose }: ModalEditAddProps) 
       <h2>Add Balance</h2>
       <div className="row">
         <div className="col mt-2">
-        <input type="text" className="form-input" placeholder="Income Amount" />
+        <input type="number" className="form-input" value={inputBal?? ''} placeholder="Income Amount" onChange={(e) => setInputBal(Number(e.target.value))}/>
         </div>
         <div className="col mt-2">
-        <button className="card-button form-btn" onClick={onClose}>Add Expenses</button></div>
+        <button type="submit" className="card-button form-btn" onClick={handleAddbutton}>Add Balance</button></div>
         <div className="col mt-2">
-        <button className= " card-button cancel-btn" onClick={onClose}>Close Modal</button></div>
+        <button  className= " card-button cancel-btn" onClick={onClose}>Close Modal</button></div>
       </div>
      
     

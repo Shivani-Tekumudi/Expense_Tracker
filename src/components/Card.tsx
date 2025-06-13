@@ -3,18 +3,22 @@ import { useState } from "react";
 /* use `interface` if exporting so that consumers can extend */
  interface MyComponentProps {
      message: string;
+     balance :number;
+     expense: number;
     handleButtonClick : () => void
     
    } 
 
-export default function Card({ message, handleButtonClick }: MyComponentProps){
+export default function Card({ message,balance,expense, handleButtonClick }: MyComponentProps){
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
 
 return (
     <div className="card">
         <div className="card-body">
-            <span>{message}: <span className={message==="Expenses"? "expense-font": "balance-font"}> ₹5000</span></span>
+{message==="Expenses"? <span>{message}<span className= "expense-font"> ₹{expense}</span></span>: <span>{message}<span className= "balance-font"> ₹{balance}</span></span>}
+
+            
             <div className="textCenter">
                 
                

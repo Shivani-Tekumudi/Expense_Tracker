@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "../components/Card";
 import ExpenseChart from "../components/PieChart";
 import ModalEditAdd from "../components/ModalAddEditExpense";
@@ -12,6 +12,23 @@ export function Home() {
     { name: "Entertainment", value: 300 },
     { name: "Travel", value: 300 },
   ];
+  
+
+  const localbalance  = localStorage.getItem('Wallet Balance');
+  const loadbalance : number|null = localbalance !== null? Number(localbalance) : null;
+  const localexpense = localStorage.getItem("expenses");
+const loadexpense : number|null = localexpense !== null? Number(localexpense) : null;
+
+
+const [balance,setBalance] =useState(loadbalance ? loadbalance:5000);
+const [expensesbalance,setExpensesbalance] =useState(loadexpense ? loadexpense:0);
+const [transactionList,setTransactionList] = useState(() => {
+const stored = localStorage.getItem("expenses");
+  return stored ? JSON.parse(stored) : [];
+});
+const [chartData,setChartData] = useState([{name : "Food", price: 0},{name : "Entertainment", price: 0},{name : "Travel", price: 0}])
+
+
 
   const [isopenAddExpenseModal, setisopenAddExpenseModal] = useState(false);
   const [isopenAddBalanceModal, setisopenAddBalModal] = useState(false);
@@ -25,7 +42,57 @@ export function Home() {
     console.log("Add Expense Button Clicked");
     setisopenAddExpenseModal(true);
   };
+const handleAddBalance = (inputBal :number | null) => {
+     console.log("Add Expense Button Clicked");
+     const newBalance = balance + (inputBal== null ? 0: inputBal);
+     setBalance(newBalance);
+     localStorage.setItem('Wallet Balance', balance.toString());
 
+
+  }
+  const handleAddExpense =(title :string, price:number|null, category:string, date:string) => {
+
+ 
+
+
+ 
+
+
+const newtransaction ={
+  id:Date.now(),
+  title:title,
+  price:price,
+  category:category,
+  date:date
+}
+const updatedTransactions = [...transactionList, newtransaction];
+  setTransactionList(updatedTransactions);
+localStorage.setItem("expenses", JSON.stringify(updatedTransactions));
+ if (price !== null) {
+  
+
+   setExpensesbalance(expensesbalance+price);
+
+    ;
+   setBalance(balance-price);
+
+ }
+
+
+
+  }
+
+  useEffect(() => {
+  if (balance !== null && expensesbalance !== null) {
+    localStorage.setItem("Wallet Balance", balance.toString());
+    localStorage.setItem("expensesbalance", expensesbalance.toString());
+  }
+}, [balance, expensesbalance]);
+
+
+
+
+  
   const closeBalanceModal = () => {
     setisopenAddBalModal(false);
   };
@@ -36,22 +103,22 @@ export function Home() {
 
   return (
     <div className="main">
-      <h3>Expense Tracker</h3>
+      <h1>Expense Tracker</h1>
       <div className="d-flex mt-2">
         <div className="flex-card d-flex">
           <div className="col-lg-4 ml-0">
-            <Card message="Wallet Balance" handleButtonClick={openAddExpenseModal} />
-            <ModalAddBalance isOpen={isopenAddExpenseModal} onClose={closeExpenseModal} />
+            <Card message="Wallet Balance" balance ={balance} expense={expensesbalance} handleButtonClick={openAddExpenseModal} />
+            <ModalAddBalance isOpen={isopenAddExpenseModal} handleAddBalance={handleAddBalance} onClose={closeExpenseModal} />
           </div>
 
           <div className="col-lg-4">
-            <Card message="Expenses" handleButtonClick={openAddbalanceModal} />
+            <Card message="Expenses" balance ={balance} expense={expensesbalance} handleButtonClick={openAddbalanceModal} />
            
-             <ModalEditAdd isOpen={isopenAddBalanceModal} onClose={closeBalanceModal} />
+             <ModalEditAdd isOpen={isopenAddBalanceModal} handleAddExpense={handleAddExpense} onClose={closeBalanceModal} />
           </div>
 
           <div className="col-lg-4">
-            <ExpenseChart data={data} />
+            <ExpenseChart data={chartData} />
           </div>
         </div>
       </div>
