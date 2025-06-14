@@ -268,6 +268,7 @@ color: #F4BB4A;
     align-items: center;
     color: #fff;
     box-shadow: 0 4px 4px 0 #00000040;
+    border: 0;
     
 }
 .tran-edit-btn{
@@ -278,11 +279,12 @@ color: #F4BB4A;
     align-items: center;
     color: #fff;
       box-shadow: 0 4px 4px 0 #00000040;
+          border: 0;
    
 }
 .transaction-body{
   padding: 20px;
-  height: 200px;
+  height: 240px;
 
 }
 ul{
@@ -290,3 +292,6 @@ ul{
   padding: 0;
 }
 
+.text-black{
+  color: #000000;
+}

@@ -3,35 +3,45 @@ import Card from "../components/Card";
 import ExpenseChart from "../components/PieChart";
 import ModalEditAdd from "../components/ModalAddEditExpense";
 import ModalAddBalance from "../components/ModalAddBalance";
-import TransactionCard from "../components/Transactions/TransactionCard";
+
 import TopexpensesBarchart from "../components/BarChart";
+import TransactionCard from "../components/Transactions/TransactionCard";
 
 export function Home() {
-  const data = [
-    { name: "Food", value: 400 },
-    { name: "Entertainment", value: 300 },
-    { name: "Travel", value: 300 },
-  ];
+  
   
 
   const localbalance  = localStorage.getItem('Wallet Balance');
   const loadbalance : number|null = localbalance !== null? Number(localbalance) : null;
-  const localexpense = localStorage.getItem("expenses");
+  const localexpense = localStorage.getItem("expensesbalance");
 const loadexpense : number|null = localexpense !== null? Number(localexpense) : null;
 
-
+const defaultTransaction ={
+ id: null,
+  title: "",
+  price: null,
+  category: "Food",
+  date: ""
+}
 const [balance,setBalance] =useState(loadbalance ? loadbalance:5000);
 const [expensesbalance,setExpensesbalance] =useState(loadexpense ? loadexpense:0);
 const [transactionList,setTransactionList] = useState(() => {
 const stored = localStorage.getItem("expenses");
   return stored ? JSON.parse(stored) : [];
 });
-const [chartData,setChartData] = useState([{name : "Food", price: 0},{name : "Entertainment", price: 0},{name : "Travel", price: 0}])
+const [chartData,setChartData] = useState([{name : "Food", price: 0},{name : "Entertainment", price: 0},{name : "Travel", price: 0}]);
+const [selectedTransaction,setSelectedTransaction] = useState({
+ id: null,
+  title: "",
+  price: null,
+  category: "",
+  date: ""
+});
 
 
 
-  const [isopenAddExpenseModal, setisopenAddExpenseModal] = useState(false);
   const [isopenAddBalanceModal, setisopenAddBalModal] = useState(false);
+  const [isopenAddExpenseModal, setisopenAddExpenseModal] = useState(false);
 
   const openAddbalanceModal = () => {
     console.log("Add Balance Button Clicked");
@@ -40,7 +50,9 @@ const [chartData,setChartData] = useState([{name : "Food", price: 0},{name : "En
 
   const openAddExpenseModal = () => {
     console.log("Add Expense Button Clicked");
+    setSelectedTransaction(defaultTransaction);
     setisopenAddExpenseModal(true);
+    
   };
 const handleAddBalance = (inputBal :number | null) => {
      console.log("Add Expense Button Clicked");
@@ -50,28 +62,74 @@ const handleAddBalance = (inputBal :number | null) => {
 
 
   }
-  const handleAddExpense =(title :string, price:number|null, category:string, date:string) => {
+  const handleAddExpense =(id:number|null,title :string, price:number|null, category:string, date:string) => {
 
 const newtransaction ={
-  id:Date.now(),
+  id:id,
   title:title,
   price:price,
   category:category,
   date:date
 }
-const updatedTransactions = [...transactionList, newtransaction];
-  setTransactionList(updatedTransactions);
-localStorage.setItem("expenses", JSON.stringify(updatedTransactions));
- if (price !== null) {
+//if id is present - in transaction list 
+//then update only the  that row 
+const edititem = transactionList.find((item: any) => item.id === id);
+let updatedTransactions
+if(edititem  ){
+const oldprice = edititem.price;
+
+ const updatedTransaction = 
+ {...edititem, 
+  title,
+  price,
+  category,
+  date};
+
+  updatedTransactions = transactionList.map((item: any) =>  item.id=== id ? updatedTransaction : item);
+if (price !== null) {
+   setExpensesbalance(expensesbalance-oldprice+price);
+   setBalance(balance+oldprice-price);
+
+ 
+}
+}
+else{ 
+  updatedTransactions = [...transactionList, newtransaction];
+   if (price !== null) {
    setExpensesbalance(expensesbalance+price);
    setBalance(balance-price);
   //  setChartData()
+ }
+}
+  setTransactionList(updatedTransactions);
+localStorage.setItem("expenses", JSON.stringify(updatedTransactions));
+  }
   
 
- }
- 
-  }
+const handleDelete =(id:number,price:number) => {
+  const deletitem =transactionList.filter((item:any) => item.id !== id);
 
+console.log("deletitem" , deletitem , "id" ,id);
+setBalance(balance+price);
+setExpensesbalance(expensesbalance-price);
+setTransactionList(deletitem);
+localStorage.setItem("expenses", JSON.stringify(deletitem));
+
+}
+const handleEdit =(id:number) => {
+   const edititem =transactionList.filter((item:any) => item.id === id);
+   if(edititem){
+ setSelectedTransaction(edititem[0]);
+  
+
+    setisopenAddExpenseModal(true);
+
+   }
+  
+
+
+
+}
   useEffect(() => {
   if (balance !== null && expensesbalance !== null) {
     localStorage.setItem("Wallet Balance", balance.toString());
@@ -87,7 +145,6 @@ const result = chartData.map((ele) => {
   return {...ele, price:total}
 })
 
-console.log(result, "sdsssssssss");
 setChartData(result)
   }
   
@@ -113,14 +170,16 @@ setChartData(result)
       <div className="d-flex mt-2">
         <div className="flex-card d-flex">
           <div className="col-lg-4 ml-0">
-            <Card message="Wallet Balance" balance ={balance} expense={expensesbalance} handleButtonClick={openAddExpenseModal} />
-            <ModalAddBalance isOpen={isopenAddExpenseModal} handleAddBalance={handleAddBalance} onClose={closeExpenseModal} />
+            <Card message="Wallet Balance" balance ={balance} expense={expensesbalance} handleButtonClick={openAddbalanceModal} />
+
+            
+            <ModalAddBalance isOpen={isopenAddBalanceModal} handleAddBalance={handleAddBalance} onClose={ closeBalanceModal}  />
           </div>
 
           <div className="col-lg-4">
-            <Card message="Expenses" balance ={balance} expense={expensesbalance} handleButtonClick={openAddbalanceModal} />
+            <Card message="Expenses" balance ={balance} expense={expensesbalance} handleButtonClick={openAddExpenseModal} />
            
-             <ModalEditAdd isOpen={isopenAddBalanceModal} handleAddExpense={handleAddExpense} onClose={closeBalanceModal} />
+             <ModalEditAdd isOpen={isopenAddExpenseModal} handleAddExpense={handleAddExpense} onClose={closeExpenseModal} transaction={selectedTransaction} />
           </div>
 
           <div className="col-lg-4">
@@ -132,7 +191,8 @@ setChartData(result)
       <div className="d-flex gap-10 mt-20">
         <div className="col">
              <h3><i>Recent Transactions</i></h3>
-      <TransactionCard />
+      <TransactionCard transactionList={transactionList} handleDelete ={handleDelete} handleEdit={handleEdit}/>
+
       </div>
       <div className="col">
         <h3><i>Top Expenses</i></h3>

@@ -1,18 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from 'react-modal';
 import {  useSnackbar } from 'notistack'
 Modal.setAppElement("#root");
 
 type ModalEditAddProps = {
   isOpen: boolean;
-  handleAddExpense : (title :string, price:number|null, category:string, date:string) => void
+  handleAddExpense : (id:number|null,title :string, price:number|null, category:string, date:string) => void
   onClose: () => void;
+  transaction : {
+    id:number|null,
+    title :string, 
+  price:number|null,
+   category:string, 
+   date:string
+}
 };
-export default function ModalEditAdd({ isOpen, handleAddExpense, onClose }: ModalEditAddProps) {
-  const [title,setTitle] =useState('');
-  const [price,setPrice] =useState<number | null>(0);
-  const [category,setCategory] =useState('Food');
-  const [date, setDate] = useState("");
+export default function ModalEditAdd({ isOpen, handleAddExpense, onClose , transaction }: ModalEditAddProps) {
+  const [id,setId] =useState<number | null>(transaction.id)
+  const [title,setTitle] =useState(transaction.title);
+  const [price,setPrice] =useState<number | null>(transaction.price);
+  const [category,setCategory] =useState(transaction.category);
+  const [date, setDate] = useState(transaction.date);
+ 
    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
 const handleAddbtn = (e: React.SyntheticEvent) => {
@@ -23,8 +32,9 @@ const handleAddbtn = (e: React.SyntheticEvent) => {
 enqueueSnackbar("expense is more than balance", { variant: 'warning' })
     }
     else{ 
- console.log("entered else")
-  handleAddExpense(title,price,category,date);
+ console.log("entered else");
+ const newId = transaction.id === null ? Date.now() : transaction.id;
+  handleAddExpense(newId,title,price,category,date);
   onClose();
   setTitle('')
 setPrice(0);
@@ -33,6 +43,13 @@ setDate('')
  }
   }
 }
+useEffect(() => {
+  // When transaction changes, update the form
+  setTitle(transaction.title || "");
+  setPrice(transaction.price ?? null);
+  setCategory(transaction.category || "");
+  setDate(transaction.date || "");
+}, [transaction]);
   return (
     <Modal 
     style={{
