@@ -8,13 +8,10 @@ type ModalEditAddProps = {
   handleAddExpense : (title :string, price:number|null, category:string, date:string) => void
   onClose: () => void;
 };
-
-
-
 export default function ModalEditAdd({ isOpen, handleAddExpense, onClose }: ModalEditAddProps) {
   const [title,setTitle] =useState('');
   const [price,setPrice] =useState<number | null>(0);
-  const [category,setCategory] =useState('food');
+  const [category,setCategory] =useState('Food');
   const [date, setDate] = useState("");
    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
@@ -35,11 +32,7 @@ setCategory('');
 setDate('')
  }
   }
-
- 
 }
-
-
   return (
     <Modal 
     style={{

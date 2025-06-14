@@ -26,20 +26,14 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
 
 export default class ExpenseChart extends PureComponent {
   static demoUrl = 'https://codesandbox.io/s/pie-chart-with-customized-label-dlhhj';
-  constructor(props) {
-    super(props);
-    this.newData= this.props.data;
-    
-
-    
-  }
+  
 
   render() {
     return (
       <ResponsiveContainer width="100%" height="100%">
         <PieChart width={400} height={400}>
           <Pie
-            data={this.newData}
+            data={this.props.data}
             cx="50%"
             cy="50%"
             labelLine={false}

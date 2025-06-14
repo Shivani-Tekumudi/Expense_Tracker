@@ -52,12 +52,6 @@ const handleAddBalance = (inputBal :number | null) => {
   }
   const handleAddExpense =(title :string, price:number|null, category:string, date:string) => {
 
- 
-
-
- 
-
-
 const newtransaction ={
   id:Date.now(),
   title:title,
@@ -69,17 +63,13 @@ const updatedTransactions = [...transactionList, newtransaction];
   setTransactionList(updatedTransactions);
 localStorage.setItem("expenses", JSON.stringify(updatedTransactions));
  if (price !== null) {
+   setExpensesbalance(expensesbalance+price);
+   setBalance(balance-price);
+  //  setChartData()
   
 
-   setExpensesbalance(expensesbalance+price);
-
-    ;
-   setBalance(balance-price);
-
  }
-
-
-
+ 
   }
 
   useEffect(() => {
@@ -88,6 +78,22 @@ localStorage.setItem("expenses", JSON.stringify(updatedTransactions));
     localStorage.setItem("expensesbalance", expensesbalance.toString());
   }
 }, [balance, expensesbalance]);
+
+useEffect(()=> {
+  if(transactionList && transactionList.length > 0){
+const result = chartData.map((ele) => {
+  const total = transactionList.filter((t:any) => t.category === ele.name).reduce((acc:any,curr:any) => acc + curr.price,0);
+
+  return {...ele, price:total}
+})
+
+console.log(result, "sdsssssssss");
+setChartData(result)
+  }
+  
+
+
+},[transactionList])
 
 
 
