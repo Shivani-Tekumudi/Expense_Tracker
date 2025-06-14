@@ -169,37 +169,37 @@ setChartData(result)
       <h1>Expense Tracker</h1>
       <div className="d-flex mt-2">
         <div className="flex-card d-flex">
-          <div className="col-lg-4 ml-0">
+          <div className="col-lg-4 ml-0 col-12 mb-2">
             <Card message="Wallet Balance" balance ={balance} expense={expensesbalance} handleButtonClick={openAddbalanceModal} />
 
             
             <ModalAddBalance isOpen={isopenAddBalanceModal} handleAddBalance={handleAddBalance} onClose={ closeBalanceModal}  />
           </div>
 
-          <div className="col-lg-4">
+          <div className="col-lg-4 col-12 mb-2">
             <Card message="Expenses" balance ={balance} expense={expensesbalance} handleButtonClick={openAddExpenseModal} />
            
              <ModalEditAdd isOpen={isopenAddExpenseModal} handleAddExpense={handleAddExpense} onClose={closeExpenseModal} transaction={selectedTransaction} />
           </div>
 
-          <div className="col-lg-4">
+          <div className="col-lg-4 col-12 mb-2" style={{height:'190px'}}>
             <ExpenseChart data={chartData} />
           </div>
         </div>
       </div>
      
       <div className="d-flex gap-10 mt-20">
-        <div className="col">
+        <div className="col-lg-6 col-12">
              <h3><i>Recent Transactions</i></h3>
       <TransactionCard transactionList={transactionList} handleDelete ={handleDelete} handleEdit={handleEdit}/>
 
       </div>
-      <div className="col">
+      <div className="col-lg-6 col-12">
         <h3><i>Top Expenses</i></h3>
      <div className="transaction-card">
 
         <div className="transaction-body" style={{fontSize:'9px'}}>
-            <TopexpensesBarchart />
+            <TopexpensesBarchart data={chartData}/>
             </div>
             
         </div>

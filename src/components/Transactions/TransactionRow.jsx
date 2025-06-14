@@ -7,7 +7,7 @@ export default function TransactionRow({id,category,title,date,price, handleDele
     return(
         <>
         <span className="d-lg-flex d-block align-items-center flex-row justify-content-between ">
-            <div className="d-flex align-items-center flex-row">
+            <div className="d-flex align-items-center flex-row justify-content-start-sm">
             <span className="circle-bg-icon">
                {(category === "Food") ? <CiPizza />: ''}
                {(category === "Entertainment") ? <CiGift />: ''}
@@ -20,9 +20,10 @@ export default function TransactionRow({id,category,title,date,price, handleDele
             </div>
             <div className="d-flex align-items-center flex-row justify-content-between  gap-10">
             <span className="money-font">₹{price}</span>
-             <button className="tran-cancel-btn" onClick={() => handleDelete(id,price)}><CiCircleRemove /></button>
+            <div>
+             <button className="tran-cancel-btn mr-10" onClick={() => handleDelete(id,price)}><CiCircleRemove /></button>
             <button className="tran-edit-btn" onClick={() =>handleEdit(id)}><CiEdit /></button>
-           </div>
+           </div></div>
           
         </span>
         <hr />
