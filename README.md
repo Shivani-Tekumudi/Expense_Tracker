@@ -1,6 +1,10 @@
-# Getting Started with Create React App
+# Getting Started with Expense_Tracker App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The main features of the application include tracking, adding, editing, and deleting expenses with a wallet balance that updates in real-time.
+
+## Core Functionalities:
+
+A web application for tracking expenses, allowing users to add, edit, and delete expenses based on category and date, and view a summary of their expenses using React.js.
 
 ## Available Scripts
 
