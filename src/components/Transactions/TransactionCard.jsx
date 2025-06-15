@@ -9,7 +9,8 @@ export default function TransactionCard({transactionList,handleDelete, handleEdi
      const totalpages = Math.ceil(transactionList.length/itemsperpage);
     const startitem =(currentPage -1) * itemsperpage;
     const enditem = startitem +itemsperpage;
-    const currentitems = transactionList.slice(startitem,enditem);
+    
+    const currentitems = transactionList ? transactionList.slice(startitem,enditem):'';
         
     
     const prevPage = () => {

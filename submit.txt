@@ -1,1 +1,13 @@
 https://expense-tracker-teal-iota.vercel.app/
+  √ should load the home page correctly (763ms)
+    √ should display wallet balance and expenses cards (477ms)
+    √ should have a visible header with correct text (403ms)
+    1) should have a button to add income and it should be styled correctly
+    2) should be responsive for mobile view
+    √ Loads the homepage correctly (1167ms)
+    3) Adds an income successfully
+    4) Displays added expense in the transaction list
+    5) Displays added food and travel expenses in the transaction list
+    6) Displays added travel and entertainment expenses in the transaction list
+    7) Displays added food, travel, and entertainment expenses in the transaction list
+    8) Persists data in localStorage

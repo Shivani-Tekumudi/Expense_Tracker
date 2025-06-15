@@ -1,4 +1,4 @@
-import { useState } from "react";
+
 
 /* use `interface` if exporting so that consumers can extend */
  interface MyComponentProps {
@@ -10,7 +10,6 @@ import { useState } from "react";
    } 
 
 export default function Card({ message,balance,expense, handleButtonClick }: MyComponentProps){
-  const [modalIsOpen, setModalIsOpen] = useState(false);
 
 
 return (
@@ -23,7 +22,7 @@ return (
                 
                
 
-                {message==="Expenses"?  <button type="button" onClick={handleButtonClick} className="card-button btn-expense">+Add Expenses</button> : <button onClick={handleButtonClick}  type="button" className="card-button btn-balance">+Add Income</button>}
+                {message==="Expenses"?  <button type="button" onClick={handleButtonClick} className="card-button btn-expense">+ Add Expenses</button> : <button onClick={handleButtonClick}  type="button" className="card-button btn-balance">+ Add Income</button>}
               
             </div>
         </div>

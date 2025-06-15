@@ -1,7 +1,7 @@
 describe('Expense Tracker Tests', () => {
   beforeEach(() => {
     // Visit the application root
-    cy.visit('http://localhost:3000'); // Replace with your app's URL
+    cy.visit('https://expense-tracker-teal-iota.vercel.app/'); // Replace with your app's URL
   });
   it('should load the home page correctly', () => {
   cy.contains('Expense Tracker'); // Check if the heading is present
